@@ -9,7 +9,7 @@ fpi <- read_html("https://www.espn.com/college-football/fpi") %>% html_table()
 fpi <- bind_cols(fpi[[1]],fpi[[2]]) %>% row_to_names(row_number = 1) %>%
   select("team" = Team,"rating" = FPI) %>% mutate(rating = standardize(as.numeric(rating)))
 
-fei <- read_html("https://www.bcftoys.com/2021-pfei/") %>% html_table()
+fei <- read_html("https://www.bcftoys.com/2021-fei/") %>% html_table()
 
 fei <- fei[[1]] %>% row_to_names(row_number = 2, remove_rows_above = T) %>%
   clean_names() %>% 
