@@ -40,8 +40,8 @@ tr <- read_html("https://www.teamrankings.com/college-football/ranking/predictiv
 
 tr <- tr[[1]] %>% 
   separate(col=Team, into = c("team","x","y","z"), sep=" ", extra="merge") %>%
-  mutate(h1=grepl("^[A-Za-z-]+$", x),
-         h2=grepl("^[A-Za-z-]+$", y),
+  mutate(h1=grepl("^[-A-Za-z\\'&]+$", x),
+         h2=grepl("^[-A-Za-z\\'&]+$", y),
          h3=if_else(h1==F,0,if_else(h2==F,1,2)),
          team=if_else(h3==0,team,if_else(h3==1,paste0(team," ",x),paste0(team," ",x," ",y)))) %>% 
   select(team,"rating" = Rating) %>% mutate(rating = standardize(as.numeric(rating)))
@@ -50,8 +50,8 @@ vs <- read_html("https://www.versussportssimulator.com/FBS/rankings") %>% html_t
 
 vs <- vs[[1]] %>% 
   separate(col=School, into = c("team","x","y","z"), sep=" ", extra="merge") %>%
-  mutate(h1=grepl("^[A-Za-z-]+$", x),
-         h2=grepl("^[A-Za-z-]+$", y),
+  mutate(h1=grepl("^[-A-Za-z\\'&]+$", x),
+         h2=grepl("^[-A-Za-z\\'&]+$", y),
          h3=if_else(h1==F,0,if_else(h2==F,1,2)),
          team=if_else(h3==0,team,if_else(h3==1,paste0(team," ",x),paste0(team," ",x," ",y)))) %>% 
   mutate(rating = log(Rating)) %>% 
