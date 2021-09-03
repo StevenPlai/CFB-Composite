@@ -132,13 +132,13 @@ model_data <- model_data[[1]] %>% row_to_names(row_number = 2, remove_rows_above
   clean_names() %>% 
   select(team,"rating" = fei) %>% 
   filter(!is.na(team) & team!= "Team") %>%
-  mutate(median = standardize(as.numeric(rating))) %>% select(rating,median)
+  mutate(mean = standardize(as.numeric(rating))) %>% select(rating,mean)
 
-lmod <- lm(rating ~ median, data=model_data)
-pdata <- predict(lmod, summary %>% select(median))
+lmod <- lm(rating ~ mean, data=model_data)
+pdata <- predict(lmod, summary %>% select(mean))
 summary$pp <- pdata
 
-summary <- left_join(summary,g2,by=c("team"="offense")) %>% select(-minutes,-seconds)
+summary <- left_join(summary,g2,by=c("team"="offense"))
 
 a <- summary %>% filter(is.na(time))
 b <- summary %>% filter(!is.na(time))
