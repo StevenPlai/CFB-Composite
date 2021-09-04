@@ -78,6 +78,16 @@ results <- left_join(completed,summary,by=c("home_team"="team")) %>%
          select(home_team,away_team,"avg_spread"=spread,"projected_margin"=pt_margin,
                 pick,result,result_type,win)
 
+results_detailed <- results %>% mutate(v_error = abs(avg_spread-result),
+                                       m_error = abs(projected_margin-result))
+
+metrics <- data.frame(v_avg = mean(results_detailed$v_error),
+                      m_avg = mean(results_detailed$m_error),
+                      v_med = median(results_detailed$v_error),
+                      m_med = median(results_detailed$m_error),
+                      v_sd = sd(results_detailed$v_error),
+                      m_sd = sd(results_detailed$m_error))
+
 moneylines <- lines %>% filter(is.na(home_score)&!is.na(home_moneyline)) %>%
   group_by(game_id) %>% mutate(spread = as.numeric(spread)) %>%
   summarise(home_team=first(home_team),
