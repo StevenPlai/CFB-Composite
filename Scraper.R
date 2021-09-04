@@ -138,7 +138,7 @@ lmod <- lm(rating ~ mean, data=model_data)
 pdata <- predict(lmod, summary %>% select(mean))
 summary$pp <- pdata
 
-summary <- left_join(summary,g2,by=c("team"="offense"))
+summary <- left_join(summary,g2,by="team")
 
 a <- summary %>% filter(is.na(time))
 b <- summary %>% filter(!is.na(time))
