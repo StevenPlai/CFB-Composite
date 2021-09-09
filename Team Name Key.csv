@@ -49,7 +49,7 @@ id,cfbfastr,argh,donchess,fei,statfox,fpi,howell,laz,pirate,sp,tpr,tr,vs
 48,Kentucky,Kentucky,Kentucky Wildcats,Kentucky,KENTUCKY,Kentucky Wildcats,Kentucky,Kentucky,Kentucky,Kentucky,Kentucky,Kentucky,Kentucky
 49,Liberty,Liberty,Liberty Flames,Liberty,LIBERTY,Liberty Flames,Liberty,Liberty,Liberty,Liberty,Liberty,Liberty,Liberty
 50,Louisiana,Louisiana,Louisiana Ragin' Cagins,Louisiana,LA LAFAYETTE,Louisiana Ragin' Cajuns,Louisiana,Louisiana-Lafayette,Louisiana,Louisiana,Louisiana,LA Lafayette,Louisiana-Lafayette
-51,Louisiana Monroe,LA-Monroe,ULM Warhawks,UL Monroe,LA MONROE,UL Monroe Warhawks,Louisiana-Monroe,Louisiana-Monroe,UL-Monroe,UL-Monroe,Louisiana Monroe,LA Monroe,Louisiana-Monroe
+51,Louisiana Monroe,LA-Monroe,ULM Warhawks,UL Monroe,LA MONROE,UL Monroe Warhawks,Louisiana-Monroe,Louisiana-Monroe,UL-Monroe,ULM,Louisiana Monroe,LA Monroe,Louisiana-Monroe
 52,Louisiana Tech,Louisiana Tech,Louisiana Tech Bulldogs,Louisiana Tech,LOUISIANA TECH,Louisiana Tech Bulldogs,Louisiana Tech,Louisiana Tech,Louisiana Tech,La. Tech,Louisiana Tech,LA Tech,Louisiana Tech
 53,Louisville,Louisville,Louisville Cardinals,Louisville,LOUISVILLE,Louisville Cardinals,Louisville,Louisville,Louisville,Louisville,Louisville,Louisville,Louisville
 54,LSU,Louisiana St.,LSU Tigers,LSU,LSU,LSU Tigers,Louisiana State,LSU,L S U,LSU,LSU,LSU,LSU
@@ -88,8 +88,8 @@ id,cfbfastr,argh,donchess,fei,statfox,fpi,howell,laz,pirate,sp,tpr,tr,vs
 87,Purdue,Purdue,Purdue Boilermakers,Purdue,PURDUE,Purdue Boilermakers,Purdue,Purdue,Purdue,Purdue,Purdue,Purdue,Purdue
 88,Rice,Rice,Rice Owls,Rice,RICE,Rice Owls,Rice,Rice,Rice,Rice,Rice,Rice,Rice
 89,Rutgers,Rutgers,Rutgers Scarlet Knights,Rutgers,RUTGERS,Rutgers Scarlet Knights,Rutgers,Rutgers,Rutgers,Rutgers,Rutgers,Rutgers,Rutgers
-90,San Diego State,San Diego St.,San Diego State Aztecs,San Diego State,SAN DIEGO ST,San Diego State Aztecs,San Diego State,San Diego St,San Diego St.,SDSU,San Diego State,San Diego St,San Diego St
-91,San Jose State,San Jose St.,San Jose State Spartans,San Jose State,SAN JOSE ST,San José State Spartans,San Jose State,San Jose St,San Jose St.,SJSU,San Jose State,San Jose St,San Jose St
+90,San Diego State,San Diego St.,San Diego State Aztecs,San Diego State,SAN DIEGO ST,San Diego State Aztecs,San Diego State,San Diego St,San Diego St.,San Diego St.,San Diego State,San Diego St,San Diego St
+91,San Jose State,San Jose St.,San Jose State Spartans,San Jose State,SAN JOSE ST,San José State Spartans,San Jose State,San Jose St,San Jose St.,San Jose St.,San Jose State,San Jose St,San Jose St
 92,SMU,Southern Methodist,SMU Mustangs,SMU,SMU,SMU Mustangs,Southern Methodist,Southern Methodist,SMU,SMU,SMU,S Methodist,SMU
 93,South Alabama,South Alabama,South Alabama Jaguars,South Alabama,S ALABAMA,South Alabama Jaguars,South Alabama,South Alabama,South Alabama,S. Alabama,South Alabama,S Alabama,South Alabama
 94,South Carolina,South Carolina,South Carolina Gamecocks,South Carolina,S CAROLINA,South Carolina Gamecocks,South Carolina,South Carolina,South Carolina,S. Carolina,South Carolina,S Carolina,South Carolina

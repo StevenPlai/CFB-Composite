@@ -1,7 +1,7 @@
 library(cfbfastR)
 
-lines <- cfbd_betting_lines(year = 2021, week = 1)
-neutrals <- cfbd_game_info(2021,week=1) %>% select(game_id,neutral_site)
+lines <- cfbd_betting_lines(year = 2021, week = 2)
+neutrals <- cfbd_game_info(2021,week=2) %>% select(game_id,neutral_site)
 
 teams <- cfbd_team_info(only_fbs=T) %>% select(school) 
 teams$school <- recode(teams$school, "San José State" = "San Jose State")
