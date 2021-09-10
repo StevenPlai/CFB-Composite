@@ -19,14 +19,14 @@ fpi <- bind_cols(fpi[[1]],fpi[[2]]) %>% row_to_names(row_number = 1)
 
 if_else()
 
-write.csv(fpi,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/FPI/FPIWeek{week}Ratings.csv"))
+write.csv(fpi,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/FPI/FPIWeek{week}Ratings.csv"),row.names=F)
 
 fpi <- fpi %>% select("team" = Team,"rating" = FPI) %>%
   mutate(rating = standardize(as.numeric(rating))) %>%
   left_join(key,by=c("team"="fpi")) %>% select("team"=cfbfastr,"fpi"=rating) %>%
   as.data.frame()
 
-write.csv(fpi,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/FPI/FPIWeek{week}Ratings.csv"))
+write.csv(fpi,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/FPI/FPIWeek{week}Ratings.csv"),row.names=F)
 
 fei <- read_html("https://www.bcftoys.com/2021-fei/") %>% html_table()
 fei <- fei[[1]] %>% row_to_names(row_number = 2, remove_rows_above = T) %>%
@@ -39,7 +39,7 @@ fei <- fei[[1]] %>% row_to_names(row_number = 2, remove_rows_above = T) %>%
   left_join(key,by=c("team"="fei")) %>% select("team"=cfbfastr,"fei"=rating) %>%
   as.data.frame()
 
-write.csv(fei,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/FEI/FEIWeek{week}Ratings.csv"))
+write.csv(fei,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/FEI/FEIWeek{week}Ratings.csv"),row.names=F)
 
 sp <- read.csv(glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/SP+/SP+Week{week}Ratings.csv")) %>% 
   separate(col=Team, into = c("rk","team"), sep=" ", extra="merge") %>%
@@ -61,7 +61,7 @@ laz <- laz[[1]] %>% filter(DIVISION == "FBS") %>% select("team" = SCHOOL,
   left_join(key,by=c("team"="laz")) %>% select("team"=cfbfastr,"laz"=rating) %>%
   as.data.frame()
 
-write.csv(laz,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/Laz/LazWeek{week}Ratings.csv"))
+write.csv(laz,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/Laz/LazWeek{week}Ratings.csv"),row.names=F)
 
 tr <- read_html("https://www.teamrankings.com/college-football/ranking/predictive-by-other") %>% 
   html_table()
@@ -76,7 +76,7 @@ tr <- tr[[1]] %>%
   left_join(key,by=c("team"="tr")) %>% select("team"=cfbfastr,"tr"=rating) %>%
   as.data.frame()
 
-write.csv(tr,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/TeamRankings/TeamRankings{week}Ratings.csv"))
+write.csv(tr,glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/TeamRankings/TeamRankings{week}Ratings.csv"),row.names=F)
 
 vs <- read_html("https://www.versussportssimulator.com/FBS/rankings") %>% html_table()
 
@@ -161,12 +161,12 @@ lmod <- lm(rating ~ mean, data=model_data)
 pdata <- predict(lmod, summary %>% select(mean))
 summary$pp <- pdata
 
-summary <- left_join(summary,g2,by="team")
+summary <- left_join(summary,pace,by="team")
 
-a <- summary %>% filter(is.na(time))
-b <- summary %>% filter(!is.na(time))
-c <- mean(b$time)
-a$time <- c
-summary <- bind_rows(a,b) %>% select(team,pp,time)
+a <- summary %>% filter(is.na(pace))
+b <- summary %>% filter(!is.na(pace))
+c <- mean(b$pace)
+a$pace <- c
+summary <- bind_rows(a,b) %>% select(team,pp,pace)
 
-write.csv(summary, glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/Composite/CompositeWeek{week}Ratings.csv"))
+write.csv(summary, glue("~/Desktop/Projects/CFB-Composite/Archived Ratings/Composite/CompositeWeek{week}Ratings.csv"),row.names=F)

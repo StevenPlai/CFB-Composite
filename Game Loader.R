@@ -6,17 +6,34 @@ neutrals <- cfbd_game_info(2021,week=2) %>% select(game_id,neutral_site)
 teams <- cfbd_team_info(only_fbs=T) %>% select(school) 
 teams$school <- recode(teams$school, "San José State" = "San Jose State")
 
-d<- cfbd_drives(2020)
-g <- d %>% group_by(game_id) %>% summarise(drives=n())
-drive_constant <- mean(g$drives)/2
+d<- cfbd_drives(2021)
 
-g2 <- d %>% mutate(time_elapsed = (time_seconds_elapsed/60)+time_minutes_elapsed) %>%
+pace21 <- d %>% mutate(time_elapsed = (time_seconds_elapsed/60)+time_minutes_elapsed) %>%
   group_by(game_id) %>% summarise(team=first(offense),
                                   time=mean(time_elapsed)) %>%
   group_by(team) %>% summarise(team=first(team),
-                                  time=mean(time)) 
+                               time=mean(time))
 
-g2$team <- recode(g2$team, "San José State" = "San Jose State")
+pace21$team <- recode(pace21$team, "San José State" = "San Jose State")
+
+if(week<6) {
+  
+d<- cfbd_drives(2020)
+
+pace20 <- d %>% mutate(time_elapsed = (time_seconds_elapsed/60)+time_minutes_elapsed) %>%
+  group_by(game_id) %>% summarise(team=first(offense),
+                                  time=mean(time_elapsed)) %>%
+  group_by(team) %>% summarise(team=first(team),
+                               time20=mean(time))
+
+pace20$team <- recode(pace20$team, "San José State" = "San Jose State")
+
+pace <- left_join(pace20,pace21,by="team") %>% 
+  mutate(pace = if_else(is.na(time),
+                        time20,
+                        (time20+(time*(week-1)))/(week-1+1))) %>%
+  select(team,pace)
+} else{pace <- pace21 %>% select(team,"pace"=time)}
 
 tbp <- lines %>% filter(is.na(home_score)) %>% group_by(game_id) %>%
   mutate(spread = as.numeric(spread)) %>%
