@@ -58,10 +58,10 @@ completed <- lines %>% filter(!is.na(home_score)&provider!="consensus") %>% grou
   left_join(neutrals,by="game_id")
 
 predictions <- left_join(tbp,summary,by=c("home_team"="team")) %>%
-  rename("home_pp"=pp,"home_time"=time) %>% left_join(summary,by=c("away_team"="team")) %>%
-  rename("away_pp"=pp,"away_time"=time) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
+  rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%
+  rename("away_pp"=pp,"away_pace"=pace) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
   mutate(pp_margin = home_pp-away_pp,
-         poss = 60/(home_time+away_time),
+         poss = 60/(home_pace+away_pace),
          pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss*2),digits=1),
                              round((-pp_margin*poss*2)-2.5,digits=1)),
          abs_diff = abs(as.numeric(spread)-pt_margin),
@@ -70,22 +70,29 @@ predictions <- left_join(tbp,summary,by=c("home_team"="team")) %>%
          pick)
 
 predictions_detailed <- left_join(tbp,summary,by=c("home_team"="team")) %>%
-  rename("home_pp"=pp,"home_time"=time) %>% left_join(summary,by=c("away_team"="team")) %>%
-  rename("away_pp"=pp,"away_time"=time) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
+  rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%
+  rename("away_pp"=pp,"away_pace"=pace) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
   mutate(pp_margin = home_pp-away_pp,
-         poss = 60/(home_time+away_time),
+         poss = 60/(home_pace+away_pace),
          pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss*2),digits=1),
                              round((-pp_margin*poss*2)-2.5,digits=1)),
+         home_win_prob = pnorm(.0001,mean=pt_margin, sd=14.5),
+         away_win_prob = pnorm(.0001,mean=-pt_margin, sd=14.5),
          abs_diff = abs(as.numeric(spread)-pt_margin),
-         pick = if_else(pt_margin<spread,"home_cover","away_cover")) %>%
-  select(home_team,away_team,home_time,away_time,poss,"avg_spread"=spread,"projected_margin"=pt_margin,
-         pick,abs_diff)
+         pick_team = if_else(pt_margin<spread,home_team,away_team),
+         win_prob = if_else(pick_team==home_team,home_win_prob,away_win_prob),
+         pick_team_margin = if_else(pick_team==home_team,-pt_margin,pt_margin),
+         pick_team_spread = if_else(home_team==pick_team,-spread,spread),
+         cover_prob = 1-pnorm(pick_team_spread,mean=pick_team_margin, sd=14.5),
+         expected_value = (100*cover_prob)-(110*(1-cover_prob))) %>%
+  select(home_team,away_team,home_pace,away_pace,poss,"avg_spread"=spread,"projected_margin"=pt_margin,
+         pick_team,abs_diff,win_prob,cover_prob,expected_value)
 
 results <- left_join(completed,summary,by=c("home_team"="team")) %>%
-  rename("home_pp"=pp,"home_time"=time) %>% left_join(summary,by=c("away_team"="team")) %>%
-  rename("away_pp"=pp,"away_time"=time) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
+  rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%
+  rename("away_pp"=pp,"away_pace"=pace) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
   mutate(pp_margin = home_pp-away_pp,
-         poss = 60/(home_time+away_time),
+         poss = 60/(home_pace+away_pace),
          pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss*2),digits=1),
                              round((-pp_margin*poss*2)-2.5,digits=1)),
          abs_diff = abs(as.numeric(spread)-pt_margin),
