@@ -1,6 +1,6 @@
 library(cfbfastR)
 
-lines <- cfbd_betting_lines(year = 2021, week = 2)
+lines <- cfbd_betting_lines(year = 2021, week = week)
 neutrals <- cfbd_game_info(2021,week=2) %>% select(game_id,neutral_site)
 
 teams <- cfbd_team_info(only_fbs=T) %>% select(school) 
@@ -84,9 +84,14 @@ predictions_detailed <- left_join(tbp,summary,by=c("home_team"="team")) %>%
          pick_team_margin = if_else(pick_team==home_team,-pt_margin,pt_margin),
          pick_team_spread = if_else(home_team==pick_team,-spread,spread),
          cover_prob = 1-pnorm(pick_team_spread,mean=pick_team_margin, sd=14.5),
-         expected_value = (100*cover_prob)-(110*(1-cover_prob))) %>%
+         expected_value = (100*cover_prob)-(110*(1-cover_prob)),
+         kelly_stake =((1.9090909090909092*cover_prob)-1)/(1.9090909090909092-1)*15) %>%
   select(home_team,away_team,home_pace,away_pace,poss,"avg_spread"=spread,"projected_margin"=pt_margin,
-         pick_team,abs_diff,win_prob,cover_prob,expected_value)
+         pick_team,abs_diff,win_prob,cover_prob,expected_value,kelly_stake)
+
+bets <- predictions_detailed %>% filter(kelly_stake>1) %>% select(home_team,away_team,
+                                                                  avg_spread,projected_margin,
+                                                                  pick_team,kelly_stake)
 
 results <- left_join(completed,summary,by=c("home_team"="team")) %>%
   rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%
