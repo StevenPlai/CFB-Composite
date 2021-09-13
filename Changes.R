@@ -36,7 +36,7 @@ data <- data.frame(team = new$team,
 
 table <- gt(data) %>%
   tab_header(title="CFB Composite Ratings",
-             subtitle="Week 2") %>%
+             subtitle=glue("Week {week}")) %>%
   tab_source_note(
     source_note = "Source: @StevenPlai on Twitter") %>%
   text_transform(
@@ -93,9 +93,9 @@ table <- gt(data) %>%
         if (x == 0){
           gt::html(fontawesome::fa("equals", fill = "grey", height = "2em"))
         } else if (x > 0){
-          gt::html(glue::glue("<span style='color:#35b03b;font-face:bold;font-size:18px;'>{x}</span>"), fontawesome::fa("arrow-up", fill = "#35b03b", height = "2em"))
+          gt::html(glue::glue("<span style='color:#35b03b;font-face:bold;font-size:18px;'>{x}</span>"), fontawesome::fa("arrow-up", fill = "#35b03b", height = "1em"))
         } else if (x < 0) {
-          gt::html(glue::glue("<span style='color:#DA2A2A;font-face:bold;font-size:18px;'>{x}</span>"), fontawesome::fa("arrow-down", fill = "#DA2A2A", height ="2em"))
+          gt::html(glue::glue("<span style='color:#DA2A2A;font-face:bold;font-size:18px;'>{x}</span>"), fontawesome::fa("arrow-down", fill = "#DA2A2A", height ="1em"))
         }
       } 
       

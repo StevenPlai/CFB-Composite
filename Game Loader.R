@@ -1,7 +1,9 @@
 library(cfbfastR)
 
 lines <- cfbd_betting_lines(year = 2021, week = week)
-neutrals <- cfbd_game_info(2021,week=2) %>% select(game_id,neutral_site)
+neutrals <- cfbd_game_info(2021,week=week) %>% select(game_id,neutral_site)
+lines$home_team <- recode(lines$home_team, "San José State" = "San Jose State")
+lines$away_team <- recode(lines$away_team, "San José State" = "San Jose State")
 
 teams <- cfbd_team_info(only_fbs=T) %>% select(school) 
 teams$school <- recode(teams$school, "San José State" = "San Jose State")
@@ -65,9 +67,9 @@ predictions <- left_join(tbp,summary,by=c("home_team"="team")) %>%
          pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss*2),digits=1),
                              round((-pp_margin*poss*2)-2.5,digits=1)),
          abs_diff = abs(as.numeric(spread)-pt_margin),
-         pick = if_else(pt_margin<spread,"home_cover","away_cover")) %>%
+         pick_team = if_else(pt_margin<spread,home_team,away_team)) %>%
   select(home_team,away_team,"avg_spread"=spread,"projected_margin"=pt_margin,
-         pick)
+         pick_team,abs_diff)
 
 predictions_detailed <- left_join(tbp,summary,by=c("home_team"="team")) %>%
   rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%

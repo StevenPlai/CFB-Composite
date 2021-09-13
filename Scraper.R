@@ -11,7 +11,7 @@ week <- CFBWeek()
 
 key <- read.csv("~/desktop/Projects/CFB-Composite/Team Name Key.csv")
 
-if(file.exists("Archived Ratings/FPI/FPIWeek{week}Ratings.csv")==T){
+if(file.exists(glue("Archived Ratings/FPI/FPIWeek{week}Ratings.csv"))==T){
   old_fpi<-read.csv(glue("Archived Ratings/FPI/FPIWeek{week}Ratings.csv"))
 } else{old_fpi<-read.csv(glue("Archived Ratings/FPI/FPIWeek{week-1}Ratings.csv"))}
 
@@ -29,8 +29,8 @@ if(identical(old_fpi,new_fpi)==F){
   write.csv(new_fpi,glue("Archived Ratings/FPI/FPIWeek{week}Ratings.csv"),row.names=F)
 }
 
-if(file.exists("Archived Ratings/FEI/FEIWeek{week}Ratings.csv")==T){
-  old_fei<-read.csv(glue("Archived Ratings/FEI/FPIWeek{week}Ratings.csv"))
+if(file.exists(glue("Archived Ratings/FEI/FEIWeek{week}Ratings.csv"))==T){
+  old_fei<-read.csv(glue("Archived Ratings/FEI/FEIWeek{week}Ratings.csv"))
 } else{old_fei<-read.csv(glue("Archived Ratings/FEI/FEIWeek{week-1}Ratings.csv"))}
 
 new_fei <- read_html("https://www.bcftoys.com/2021-fei/") %>% html_table()
@@ -63,7 +63,7 @@ sp <- read.csv(glue("Archived Ratings/SP+/SP+Week{week}Ratings.csv")) %>%
 
 #sp_update <- Sys.time()
 
-if(file.exists("Archived Ratings/Laz/LazWeek{week}Ratings.csv")==T){
+if(file.exists(glue("Archived Ratings/Laz/LazWeek{week}Ratings.csv"))==T){
   old_laz<-read.csv(glue("Archived Ratings/Laz/LazWeek{week}Ratings.csv"))
 } else{old_laz<-read.csv(glue("Archived Ratings/Laz/LazWeek{week-1}Ratings.csv"))}
 
@@ -80,7 +80,7 @@ if(identical(old_laz,new_laz)==F){
   write.csv(new_laz,glue("Archived Ratings/Laz/LazWeek{week}Ratings.csv"),row.names=F)
 }
 
-if(file.exists("Archived Ratings/TeamRankings/TeamRankingsWeek{week}Ratings.csv")==T){
+if(file.exists(glue("Archived Ratings/TeamRankings/TeamRankingsWeek{week}Ratings.csv"))==T){
   old_tr<-read.csv(glue("Archived Ratings/TeamRankings/TeamRankingsWeek{week}Ratings.csv"))
 } else{old_tr<-read.csv(glue("Archived Ratings/TeamRankings/TeamRankingsWeek{week-1}Ratings.csv"))}
 
@@ -102,7 +102,7 @@ if(identical(old_tr,new_tr)==F){
   write.csv(new_tr,glue("Archived Ratings/TeamRankings/TeamRankingsWeek{week}Ratings.csv"),row.names=F)
 }
 
-if(file.exists("Archived Ratings/VersusSports/VersusSportsWeek{week}Ratings.csv")==T){
+if(file.exists(glue("Archived Ratings/VersusSports/VersusSportsWeek{week}Ratings.csv"))==T){
   old_vs<-read.csv(glue("Archived Ratings/VersusSports/VersusSportsWeek{week}Ratings.csv"))
 } else{old_vs<-read.csv(glue("Archived Ratings/VersusSports/VersusSportsWeek{week-1}Ratings.csv"))}
 
@@ -124,7 +124,7 @@ if(identical(old_vs,new_vs)==F){
   write.csv(new_vs,glue("Archived Ratings/VersusSports/VersusSportsWeek{week}Ratings.csv"),row.names=F)
 }
 
-if(file.exists("Archived Ratings/Howell/HowellWeek{week}Ratings.csv")==T){
+if(file.exists(glue("Archived Ratings/Howell/HowellWeek{week}Ratings.csv"))==T){
   old_how<-read.csv(glue("Archived Ratings/Howell/HowellWeek{week}Ratings.csv"))
 } else{old_how<-read.csv(glue("Archived Ratings/Howell/HowellWeek{week-1}Ratings.csv"))}
 
@@ -141,51 +141,69 @@ if(identical(old_how,new_how)==F){
   write.csv(new_how,glue("Archived Ratings/Howell/HowellWeek{week}Ratings.csv"),row.names=F)
 }
 
-fox <- read_html("http://www.statfox.com/cfb/power/") %>% html_table()
+if(file.exists(glue("Archived Ratings/Statfox/StatfoxWeek{week}Ratings.csv"))==T){
+  old_fox<-read.csv(glue("Archived Ratings/Statfox/StatfoxWeek{week}Ratings.csv"))
+} else{old_fox<-read.csv(glue("Archived Ratings/Statfox/StatfoxWeek{week-1}Ratings.csv"))}
 
-fox <- fox[[4]] %>% row_to_names(row_number = 1) %>%
+new_fox <- read_html("http://www.statfox.com/cfb/power/") %>% html_table()
+
+new_fox <- new_fox[[4]] %>% row_to_names(row_number = 1) %>%
   select("team"=Team,"rating"=Rating) %>% 
   mutate(rating = standardize(as.numeric(rating))) %>%
   left_join(key,by=c("team"="statfox")) %>% select("team"=cfbfastr,"statfox"=rating) %>%
   as.data.frame()
 
-dr <- read_html("https://www.dratings.com/sports/ncaa-fbs-football-ratings/") %>% html_table()
+if(identical(old_fox,new_fox)==F){
+  fox_update <- Sys.time()
+  write.csv(new_fox,glue("Archived Ratings/Statfox/StatfoxWeek{week}Ratings.csv"),row.names=F)
+}
 
-dr <- dr[[1]] %>% select(Rank,"rating"=Overall) %>%
+if(file.exists(glue("Archived Ratings/Donchess/DonchessWeek{week}Ratings.csv"))==T){
+  old_dr<-read.csv(glue("Archived Ratings/Donchess/DonchessWeek{week}Ratings.csv"))
+} else{old_dr<-read.csv(glue("Archived Ratings/Donchess/DonchessWeek{week-1}Ratings.csv"))}
+
+new_dr <- read_html("https://www.dratings.com/sports/ncaa-fbs-football-ratings/") %>% html_table()
+
+new_dr <- new_dr[[1]] %>% select(Rank,"rating"=Overall) %>%
   separate(col=Rank, into = c("rk","team"), sep="\\.", extra="merge") %>%
   separate(col=team, into = c("team"), sep="\\(", extra="drop") %>% select(team,rating) %>%
   mutate(team=trimws(team,"both"),
          rating = standardize(as.numeric(rating)))
-dr$team <- stringi::stri_sub(dr$team, from=2,to=1000)
-dr <- left_join(dr,key,by=c("team"="donchess")) %>% select("team"=cfbfastr,"donchess"=rating) %>%
+new_dr$team <- stringi::stri_sub(new_dr$team, from=2,to=1000)
+new_dr <- left_join(new_dr,key,by=c("team"="donchess")) %>% select("team"=cfbfastr,"donchess"=rating) %>%
   as.data.frame()
 
-argh <- read_html("http://www.arghratings.com/currate.html") %>% html_table()
+if(identical(old_dr,new_dr)==F){
+  dr_update <- Sys.time()
+  write.csv(new_dr,glue("Archived Ratings/Donchess/DonchessWeek{week}Ratings.csv"),row.names=F)
+}
 
-argh <- argh[[1]] %>% select("team"=Team,"rating"="Power Rating") %>%
+new_argh <- read_html("http://www.arghratings.com/currate.html") %>% html_table()
+
+new_argh <- new_argh[[1]] %>% select("team"=Team,"rating"="Power Rating") %>%
   mutate(rating = standardize(as.numeric(rating))) %>%
   left_join(key,by=c("team"="argh")) %>% filter(!is.na(cfbfastr)) %>%
   select("team"=cfbfastr,"argh"=rating) %>%
   as.data.frame()
 
-tpr <- read_html("https://thepowerrank.com/college-football/bowl-subdivision-rankings/") %>% html_table()
+new_tpr <- read_html("https://thepowerrank.com/college-football/bowl-subdivision-rankings/") %>% html_table()
 
-tpr <- tpr[[1]] %>% select("team"=Team,"rating"=Rating) %>%
+new_tpr <- new_tpr[[1]] %>% select("team"=Team,"rating"=Rating) %>%
   mutate(rating = standardize(as.numeric(rating))) %>%
   left_join(key,by=c("team"="tpr")) %>% select("team"=cfbfastr,"tpr"=rating) %>%
   as.data.frame()
 
-pr <- read_html("https://piratings.wordpress.com/") %>% html_table()
+new_pr <- read_html("https://piratings.wordpress.com/") %>% html_table()
 
-pr <- pr[[4]] %>% row_to_names(row_number = 1) %>% select("team"=Team,"rating"=Rating) %>%
+new_pr <- new_pr[[19]] %>% row_to_names(row_number = 1) %>% select("team"=Team,"rating"=Rating) %>%
   mutate(rating = standardize(as.numeric(rating))) %>% 
   left_join(key,by=c("team"="pirate")) %>% select("team"=cfbfastr,"pirate"=rating) %>%
   as.data.frame()
 
-master <- full_join(argh,dr,by="team") %>% full_join(fei,by="team") %>%
-  full_join(fpi,by="team") %>% full_join(fox,by="team") %>% full_join(how,by="team") %>%
-  full_join(laz,by="team") %>% full_join(pr,by="team") %>% full_join(sp,by="team") %>% 
-  full_join(tpr,by="team") %>% full_join(tr,by="team") %>% full_join(vs,by="team")
+master <- full_join(new_argh,dr,by="team") %>% full_join(new_fei,by="team") %>%
+  full_join(new_fpi,by="team") %>% full_join(new_fox,by="team") %>% full_join(new_how,by="team") %>%
+  full_join(new_laz,by="team") %>% full_join(new_pr,by="team") %>% full_join(sp,by="team") %>% 
+  full_join(new_tpr,by="team") %>% full_join(new_tr,by="team") %>% full_join(new_vs,by="team")
 
 summary <- as.data.frame(master$team) %>% mutate(mean = rowMeans(master[,c(2:13)]),
                                                  median = rowMedians(as.matrix(master[,c(2:13)])),
