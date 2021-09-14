@@ -87,7 +87,7 @@ predictions_detailed <- left_join(tbp,summary,by=c("home_team"="team")) %>%
          pick_team_spread = if_else(home_team==pick_team,-spread,spread),
          cover_prob = 1-pnorm(pick_team_spread,mean=pick_team_margin, sd=14.5),
          expected_value = (100*cover_prob)-(110*(1-cover_prob)),
-         kelly_stake =((1.9090909090909092*cover_prob)-1)/(1.9090909090909092-1)*15) %>%
+         stake =((1.9090909090909092*cover_prob)-1)/(1.9090909090909092-1)*15) %>%
   select(home_team,away_team,home_pace,away_pace,poss,"avg_spread"=spread,"projected_margin"=pt_margin,
          pick_team,abs_diff,win_prob,cover_prob,expected_value,kelly_stake)
 
@@ -120,12 +120,41 @@ metrics <- data.frame(v_avg = mean(results_detailed$v_error),
                       m_sd = sd(results_detailed$m_error))
 
 moneylines <- lines %>% filter(is.na(home_score)&!is.na(home_moneyline)) %>%
-  group_by(game_id) %>% mutate(spread = as.numeric(spread)) %>%
+  group_by(game_id) %>% mutate(home_ml = as.numeric(home_moneyline),
+                               away_ml = as.numeric(away_moneyline)) %>%
   summarise(home_team=first(home_team),
             away_team=first(away_team),
             home_conf=first(home_conference),
             away_conf=first(away_conference),
-            spread = mean(spread),
+            home_ml=mean(home_ml),
+            away_ml=mean(away_ml),
             result = first(away_score-home_score)) %>%
-  filter(!is.na(home_conf)&!is.na(away_conf))
+  filter(!is.na(home_conf)&!is.na(away_conf)) %>%
+  select(-result) %>%
+  left_join(neutrals,by="game_id")
+
+ml_predictions <- left_join(moneylines,summary,by=c("home_team"="team")) %>%
+  rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%
+  rename("away_pp"=pp,"away_pace"=pace) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
+  mutate(pp_margin = home_pp-away_pp,
+         poss = 60/(home_pace+away_pace),
+         pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss*2),digits=1),
+                             round((-pp_margin*poss*2)-2.5,digits=1)),
+         home_wp = pnorm(.0001,mean=pt_margin, sd=14.5),
+         away_wp = pnorm(.0001,mean=-pt_margin, sd=14.5),
+         home_imp = if_else(home_ml<0,-home_ml/(-home_ml+100),
+                            100/(home_ml+100)),
+         away_imp = if_else(away_ml<0,-away_ml/(-away_ml+100),
+                            100/(away_ml+100)),
+         home_ev = if_else(home_ml>0,(home_ml*home_wp)-(100*(away_wp)),
+                           (abs(home_ml)/100*home_wp)-(100*(away_wp))),
+         away_ev = if_else(away_ml>0,(away_ml*away_wp)-(100*(home_wp)),
+                           (abs(away_ml)/100*away_wp)-(100*(home_wp))),
+         pick_team = if_else(home_ev>away_ev,home_team,away_team),
+         ev = if_else(home_ev>away_ev,home_ev,away_ev)) %>%
+  select(home_team,away_team,home_wp,away_wp,home_imp,away_imp,home_ml,away_ml,pick_team,ev)
+
+ml_bets <- predictions_detailed %>% filter(kelly_stake>1) %>% select(home_team,away_team,
+                                                                  avg_spread,projected_margin,
+                                                                  pick_team,kelly_stake)
 
