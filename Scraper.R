@@ -5,11 +5,12 @@ library(robustHD)
 library(heatmaply)
 library(glue)
 library(stringi)
-source("~/Desktop/Projects/CFB-Composite/Functions.R")
+library(cfbfastR)
+source("Functions.R")
 
 week <- CFBWeek()
 
-key <- read.csv("~/desktop/Projects/CFB-Composite/Team Name Key.csv")
+key <- read.csv("Team Name Key.csv")
 
 if(file.exists(glue("Archived Ratings/FPI/FPIWeek{week}Ratings.csv"))==T){
   old_fpi<-read.csv(glue("Archived Ratings/FPI/FPIWeek{week}Ratings.csv"))
@@ -24,7 +25,9 @@ new_fpi <- new_fpi %>% select("team" = Team,"rating" = FPI) %>%
   left_join(key,by=c("team"="fpi")) %>% select("team"=cfbfastr,"fpi"=rating) %>%
   as.data.frame()
 
-if(identical(old_fpi,new_fpi)==F){
+#HAVE TO ROUND
+
+if(length(anti_join(new_fpi,old_fpi))>0){
   fpi_update <- Sys.time()
   write.csv(new_fpi,glue("Archived Ratings/FPI/FPIWeek{week}Ratings.csv"),row.names=F)
 }
@@ -220,6 +223,35 @@ model_data <- model_data[[1]] %>% row_to_names(row_number = 2, remove_rows_above
 lmod <- lm(rating ~ mean, data=model_data)
 pdata <- predict(lmod, summary %>% select(mean))
 summary$pp <- pdata
+
+d<- cfbd_drives(2021)
+
+pace21 <- d %>% mutate(time_elapsed = (time_seconds_elapsed/60)+time_minutes_elapsed) %>%
+  group_by(game_id) %>% summarise(team=first(offense),
+                                  time=mean(time_elapsed)) %>%
+  group_by(team) %>% summarise(team=first(team),
+                               time=mean(time))
+
+pace21$team <- recode(pace21$team, "San José State" = "San Jose State")
+
+if(week<6) {
+  
+  d<- cfbd_drives(2020)
+  
+  pace20 <- d %>% mutate(time_elapsed = (time_seconds_elapsed/60)+time_minutes_elapsed) %>%
+    group_by(game_id) %>% summarise(team=first(offense),
+                                    time=mean(time_elapsed)) %>%
+    group_by(team) %>% summarise(team=first(team),
+                                 time20=mean(time))
+  
+  pace20$team <- recode(pace20$team, "San José State" = "San Jose State")
+  
+  pace <- left_join(pace20,pace21,by="team") %>% 
+    mutate(pace = if_else(is.na(time),
+                          time20,
+                          (time20+(time*(week-1)))/(week-1+1))) %>%
+    select(team,pace)
+} else{pace <- pace21 %>% select(team,"pace"=time)}
 
 summary <- left_join(summary,pace,by="team")
 
