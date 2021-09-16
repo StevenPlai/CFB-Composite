@@ -6,8 +6,7 @@ lines <- cfbd_betting_lines(year = 2021, week = week)
 neutrals <- cfbd_game_info(2021,week=week) %>% select(game_id,neutral_site)
 lines$home_team <- recode(lines$home_team, "San José State" = "San Jose State")
 lines$away_team <- recode(lines$away_team, "San José State" = "San Jose State")
-
-summary <- read.csv()
+summary <- read.csv(glue("Archived Ratings/Composite/CompositeWeek{week}Ratings.csv"))
 
 tbp <- lines %>% filter(is.na(home_score)) %>% group_by(game_id) %>%
   mutate(spread = as.numeric(spread)) %>%
@@ -31,7 +30,7 @@ completed <- lines %>% filter(!is.na(home_score)&provider!="consensus") %>% grou
   filter(!is.na(home_conf)&!is.na(away_conf)) %>% 
   left_join(neutrals,by="game_id")
 
-predictions <- left_join(tbp,summary,by=c("home_team"="team")) %>%
+spreads <- left_join(tbp,summary,by=c("home_team"="team")) %>%
   rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%
   rename("away_pp"=pp,"away_pace"=pace) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
   mutate(pp_margin = home_pp-away_pp,
@@ -42,8 +41,8 @@ predictions <- left_join(tbp,summary,by=c("home_team"="team")) %>%
          pick_team = if_else(pt_margin<spread,home_team,away_team)) %>%
   select(home_team,away_team,"avg_spread"=spread,"projected_margin"=pt_margin,
          pick_team,abs_diff)
-
-predictions_detailed <- left_join(tbp,summary,by=c("home_team"="team")) %>%
+ 
+spreads2 <- left_join(tbp,summary,by=c("home_team"="team")) %>%
   rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%
   rename("away_pp"=pp,"away_pace"=pace) %>% filter(!is.na(home_pp) & !is.na(away_pp)) %>%
   mutate(pp_margin = home_pp-away_pp,
@@ -58,14 +57,13 @@ predictions_detailed <- left_join(tbp,summary,by=c("home_team"="team")) %>%
          pick_team_margin = if_else(pick_team==home_team,-pt_margin,pt_margin),
          pick_team_spread = if_else(home_team==pick_team,-spread,spread),
          cover_prob = 1-pnorm(pick_team_spread,mean=pick_team_margin, sd=14.5),
-         expected_value = (100*cover_prob)-(110*(1-cover_prob)),
-         stake =((1.9090909090909092*cover_prob)-1)/(1.9090909090909092-1)*15) %>%
-  select(home_team,away_team,home_pace,away_pace,poss,"avg_spread"=spread,"projected_margin"=pt_margin,
-         pick_team,abs_diff,win_prob,cover_prob,expected_value,kelly_stake)
+         ev = (100*cover_prob)-(110*(1-cover_prob)),
+         stake =((1.9090909090909092*cover_prob)-1)/(1.9090909090909092-1)*15)
 
-bets <- predictions_detailed %>% filter(kelly_stake>1) %>% select(home_team,away_team,
-                                                                  avg_spread,projected_margin,
-                                                                  pick_team,kelly_stake)
+spreads3 <- spreads2 %>%
+  select(home_team,away_team,
+         pick_team,"pick"=spread,ev) %>%
+  mutate(type = "spread")
 
 results <- left_join(completed,summary,by=c("home_team"="team")) %>%
   rename("home_pp"=pp,"home_pace"=pace) %>% left_join(summary,by=c("away_team"="team")) %>%
@@ -123,10 +121,10 @@ ml_predictions <- left_join(moneylines,summary,by=c("home_team"="team")) %>%
          away_ev = if_else(away_ml>0,(away_ml*away_wp)-(100*(home_wp)),
                            (abs(away_ml)/100*away_wp)-(100*(home_wp))),
          pick_team = if_else(home_ev>away_ev,home_team,away_team),
-         ev = if_else(home_ev>away_ev,home_ev,away_ev)) %>%
-  select(home_team,away_team,home_wp,away_wp,home_imp,away_imp,home_ml,away_ml,pick_team,ev)
+         ev = if_else(home_ev>away_ev,home_ev,away_ev),
+         pick_ml = if_else(home_ev>away_ev,home_ml,away_ml)) %>%
+  select(home_team,away_team,pick_team,"pick"=pick_ml,ev) %>%
+  mutate(type = "moneyline")
 
-ml_bets <- predictions_detailed %>% filter(kelly_stake>1) %>% select(home_team,away_team,
-                                                                  avg_spread,projected_margin,
-                                                                  pick_team,kelly_stake)
-
+bets <- bind_rows(spreads3,ml_predictions) %>%
+  mutate(stake = ev/4.75) %>% filter(stake>0)
