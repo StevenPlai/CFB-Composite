@@ -1,4 +1,7 @@
 
+change_pos <- function(x) glue("+{x}")
+change_neg <- function(x) "-x"
+no_change <- function(x) "x"
 CFBWeek <- function() {
   date <- Sys.time()
   month <- as.numeric(date %>% stri_sub(6,7))
