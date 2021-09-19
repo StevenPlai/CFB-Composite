@@ -1,0 +1,66 @@
+ The prediction average is the average prediction of a set of computer ratings.
+All lines are in reference to the home team.  +3 means the home team is favored 
+to win by 3 points and -3 means the visitor is favored by 3 points.  I am using
+predictions that are posted on the various web pages or the ratings that are sent to me.
+These predictions are being used for research and informational purposes only.Disclaimer
+Season Totals
+Comma Separated File that can be read into Excel
+
+Updated:    Friday, September 17, 2021    10:30 AM
+
+  Home                Visitor          Opening   Updated  Midweek   Prediction  Prediction    Prediction       Prediction     Probability Home Team
+                                         line     line     line        Avg.       Median    Standard Deviation  Min  Max         Wins    Covers
+
+Air Force          Utah St.             11.00      9.00      8.50      8.31        9.00           6.22        -3.43  22.00      0.6865    0.4884
+Arkansas           Georgia Southern     18.00     23.50     23.50     22.62       23.01           9.45         0.66  43.30      0.8889    0.4857
+Army               Connecticut          31.00     34.50     34.00     32.55       33.55           8.15         1.08  46.35      0.9655    0.4677
+BYU                Arizona St.          -2.00     -3.50     -3.50      3.25        3.87           5.27        -8.46  15.21      0.5768    0.6141
+Boise St.          Oklahoma St.          4.00      3.50      4.00      2.52        1.90           4.60        -4.56  17.35      0.5603    0.4830
+Buffalo            Coastal Carolina    -11.00    -14.00    -14.00     -4.80       -5.16           5.28       -20.35   6.58      0.3876    0.6537
+Clemson            Georgia Tech         29.00     28.50     28.50     25.94       25.61          10.14         1.84  46.44      0.9152    0.4589
+Colorado           Minnesota            -3.00      2.50      3.00      2.03        1.96           5.47       -10.81  17.17      0.5480    0.4920
+Duke               Northwestern         -2.00     -2.50     -2.50     -5.48       -5.50           7.38       -22.06  11.90      0.3774    0.4502
+Florida            Alabama             -15.00    -14.50    -14.50    -10.15       -9.96           5.72       -26.97  -0.24      0.2744    0.5738
+Georgia            South Carolina       32.00     31.50     32.00     26.13       26.15           8.38         2.10  46.58      0.9266    0.4120
+Georgia St.        Charlotte             2.00      4.50      4.00      0.71        0.31           9.07       -32.61  15.05      0.5154    0.4383
+Hawaii             San Jose St.         -3.00     -6.50     -7.00     -5.33       -5.21           5.16       -18.95  13.20      0.3752    0.5201
+Illinois           Maryland             -5.00     -7.00     -7.50     -7.33       -6.88           6.03       -21.81  11.95      0.3335    0.4944
+Indiana            Cincinnati           -3.00     -3.50     -3.50     -2.55       -2.73           5.05       -19.10  13.23      0.4395    0.5164
+Iowa               Kent                 21.00     23.00     23.00     25.13       25.33           9.12         1.00  47.69      0.9144    0.5347
+Kansas             Baylor              -14.00    -17.50    -18.00    -14.26      -14.15           6.85       -33.63  -1.14      0.2055    0.5545
+Kansas St.         Nevada               -2.00     -2.00     -1.00      5.32        6.15           4.78        -5.73  17.40      0.6255    0.6240
+LSU                Central Mich.        21.00     19.50     19.50     14.63       14.58           8.03        -2.48  33.69      0.7939    0.4198
+Liberty            Old Dominion         23.00     27.50     27.50     24.69       23.10           9.32         1.00  39.45      0.9094    0.4544
+Louisiana Tech     SMU                 -15.00    -12.50    -12.50     -8.00       -7.13           5.82       -22.73  10.70      0.3186    0.5762
+Louisiana-LafayetteOhio                 22.00     19.50     19.50     16.45       16.98           6.64        -0.48  33.81      0.8296    0.4486
+Louisville         Central Florida      -8.00     -7.00     -7.00     -5.19       -5.67           4.74       -17.38   2.00      0.3774    0.5311
+Marshall           East Carolina        10.00      9.50     10.00     12.28       11.16           5.53         0.74  29.46      0.7667    0.5474
+Massachusetts      Eastern Mich.       -21.00    -22.00    -22.00    -13.92      -15.00           8.97       -33.22  15.15      0.2233    0.6298
+Memphis            Mississippi St.      -3.00     -3.50     -3.50     -1.68       -0.23           6.32       -26.70  10.00      0.4611    0.5309
+Miami (Fla.)       Michigan St.          8.00      6.00      6.00      4.90        6.76           6.63       -15.68  16.72      0.6118    0.4815
+Michigan           Northern Ill.        24.00     27.50     27.50     23.91       24.50           7.89         0.76  43.81      0.9106    0.4406
+Mississippi        Tulane               15.00     14.00     14.00     10.86       11.58           5.13        -2.23  23.67      0.7418    0.4463
+North Carolina     Virginia             10.00      8.00      8.00      7.05        7.00           5.15        -3.04  20.50      0.6631    0.4837
+North Texas        UAB                 -14.00    -12.00    -12.00     -7.06       -8.15           5.94       -24.24  11.55      0.3391    0.5835
+Notre Dame         Purdue                8.00      7.50      7.50      7.54        6.49           5.91        -4.00  19.50      0.6713    0.5007
+Ohio St.           Tulsa                31.00     25.00     24.50     22.12       22.51           7.02         0.55  38.44      0.8980    0.4517
+Oklahoma           Nebraska             23.00     22.50     22.50     16.71       18.53           7.65       -13.75  27.88      0.8278    0.4045
+Penn St.           Auburn                7.00      5.00      5.50      6.07        5.51           3.51        -0.90  16.20      0.6450    0.5186
+Pittsburgh         Western Mich.        14.00     15.00     15.00     14.90       15.63           6.30        -0.22  32.25      0.8077    0.4983
+San Diego St.      Utah                 -7.00     -8.50     -9.00     -3.42       -4.61           6.03       -14.66  12.69      0.4204    0.5857
+Southern Miss.     Troy St.             -8.00    -10.00    -10.00     -7.84       -7.24           4.94       -18.45   0.50      0.3192    0.5370
+Temple             Boston College      -16.00    -14.50    -15.50    -13.74      -14.82           7.80       -28.31  12.10      0.2194    0.5127
+Texas              Rice                 23.00     25.50     25.50     27.36       29.00           8.06         1.31  50.31      0.9372    0.5308
+Texas A&M          New Mexico           25.00     29.50     30.00     32.95       35.90          10.02         1.41  53.81      0.9600    0.5554
+Texas Tech         Florida Intl.        21.00     20.00     20.00     19.14       20.17           6.68        -0.99  32.69      0.8661    0.4856
+Texas-San Antonio  Middle Tenn.          9.00     13.00     13.00     10.79       11.16           4.26        -0.24  19.00      0.7435    0.4618
+Toledo             Colorado St.         13.00     14.00     14.50     16.73       16.50           8.22        -4.95  47.25      0.8246    0.5450
+UCLA               Fresno St.           11.00     11.00     11.00     13.48       13.12           5.59         0.76  25.76      0.7876    0.5423
+UNLV               Iowa St.            -30.00    -31.50    -31.50    -26.10      -26.07           8.84       -44.56  -1.18      0.0761    0.5878
+Vanderbilt         Stanford             -9.00    -12.00    -12.00    -15.92      -16.52           6.80       -31.28  -0.41      0.1790    0.4342
+Wake Forest        Florida St.           5.00      4.50      5.00     10.78       10.19           5.06         0.20  21.31      0.7405    0.6066
+Washington         Arkansas St.         16.00     17.00     16.50     11.47       12.80           8.31        -7.39  23.09      0.7384    0.4095
+Washington St.     USC                 -10.00     -8.50     -8.50     -8.58       -8.13           4.96       -22.10   1.00      0.3036    0.4986
+West Va.           Virginia Tech         3.00      2.50      2.50      0.53        1.47           5.97       -25.45   9.70      0.5124    0.4665
+Wyoming            Ball St.              6.00      7.00      7.00      3.52        3.40           6.66       -11.06  24.70      0.5807    0.4414
+

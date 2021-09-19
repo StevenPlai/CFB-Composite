@@ -50,23 +50,8 @@ spreads <- lines %>% filter(!is.na(home_score)) %>% group_by(game_id) %>%
          cover_team = if_else(result<spread,home_team,away_team),
          amount_won = if_else(pick_team==cover_team,.9090909090909092*sp_ev,-sp_ev),
          stake =((1.9090909090909092*cover_prob)-1)/(1.9090909090909092-1)*15) %>%
-  select(home_team,away_team,home_pace,away_pace,poss,spread,"projected_margin"=pt_margin,
-         pick_team,abs_diff,win_prob,cover_prob,cover_team,sp_ev,amount_won,week,result) %>%
   filter(sp_ev>0) %>%
-  select(home_team,away_team,pick_team,spread,cover_team,sp_ev) 
-
-results_detailed <- moneylines %>% mutate(v_error = abs(avg_spread-result),
-                                       m_error = abs(projected_margin-result))
-
-metrics <- data.frame(v_avg = mean(results_detailed$v_error),
-                      m_avg = mean(results_detailed$m_error),
-                      v_med = median(results_detailed$v_error),
-                      m_med = median(results_detailed$m_error),
-                      v_sd = sd(results_detailed$v_error),
-                      m_sd = sd(results_detailed$m_error))
-
-roi <- sum(moneylines$amount_won)/sum(moneylines$expected_value)
-units <- sum(moneylines$amount_won)/mean(moneylines$expected_value)
+  select(home_team,away_team,pick_team,"ev"=sp_ev,amount_won,week)
 
 moneylines <- lines %>% filter(!is.na(home_score)&!is.na(home_moneyline)) %>%
   group_by(game_id) %>% mutate(home_ml = as.numeric(home_moneyline),
@@ -103,21 +88,11 @@ moneylines <- lines %>% filter(!is.na(home_score)&!is.na(home_moneyline)) %>%
          ml_ev = if_else(home_ev>away_ev,home_ev,away_ev),
          winner = if_else(result>0,away_team,home_team),
          amount_won = if_else(pick_team==winner,if_else(pick_ml>0,pick_ml*ml_ev/100,ml_ev*100/-pick_ml),
-                              -ml_ev)) %>%
-  select(home_team,away_team,home_wp,away_wp,home_imp,away_imp,home_ml,away_ml,pick_team,ml_ev,pick_ml,
-         winner, amount_won) %>% filter(ml_ev>0) %>%
-  select(home_team,away_team,pick_team,winner,ml_ev,pick_ml,amount_won)
+                              -ml_ev)) %>% filter(ml_ev>0) %>%
+  select(home_team,away_team,pick_team,"ev"=ml_ev,amount_won,week)
 
-roi <- sum(moneylines$amount_won)/sum(moneylines$ml_ev)
-units <- sum(moneylines$amount_won)/mean(moneylines$ml_ev)
+bets <- bind_rows(spreads,moneylines) %>%
+  mutate(stake = ev/1.52) %>% filter(stake>0)
 
-bets <- left_join(spreads,moneylines,by=c("home_team","away_team","pick_team")) %>%
-  mutate(ev = if_else(is.na(ml_ev),sp_ev,if_else(ml_ev>sp_ev,ml_ev,sp_ev)),
-         pick_type = if_else(is.na(ml_ev),"spread",if_else(ml_ev>sp_ev,"moneyline","spread")),
-         amt_won = if_else(pick_type=="moneyline",
-                           if_else(winner==pick_team,
-                                   if_else(pick_ml>0,pick_ml*ml_ev/100,ml_ev*100/-pick_ml),-ml_ev),
-                           if_else(cover_team==pick_team,.9090909090909092*sp_ev,-sp_ev)))
-
-roi <- sum(bets$amt_won)/sum(bets$ev)
-units <- sum(bets$amt_won)/mean(bets$ev)
+roi <- sum(bets$amount_won)/sum(bets$stake)
+units <- sum(bets$amount_won)/mean(bets$stake)
