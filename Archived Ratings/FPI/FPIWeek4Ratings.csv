@@ -1,131 +1,131 @@
 "team","fpi"
-"Alabama",2.2308
-"Georgia",2.0837
-"Oklahoma",1.9021
-"Ohio State",1.729
-"Clemson",1.6944
-"Michigan",1.6079
-"Florida",1.5214
-"Oregon",1.4089
-"Penn State",1.3657
-"Auburn",1.2705
-"Texas",1.2705
-"North Carolina",1.2359
-"Texas A&M",1.2272
-"Iowa",1.1667
-"Iowa State",1.1407
-"Ole Miss",1.1407
-"Michigan State",1.1407
-"Cincinnati",1.0542
-"Wisconsin",1.0369
-"Arkansas",1.011
-"Notre Dame",1.011
-"Virginia Tech",0.9331
-"NC State",0.9244
-"USC",0.8379
-"Pittsburgh",0.7947
-"LSU",0.786
-"UCLA",0.7428
-"Virginia",0.7341
-"Baylor",0.7255
-"Mississippi State",0.7168
-"Nebraska",0.6909
-"TCU",0.6649
-"Appalachian State",0.6389
-"Texas Tech",0.6216
-"Miami",0.6043
-"Washington",0.6043
-"Fresno State",0.5784
-"Minnesota",0.5611
-"Purdue",0.5611
-"Utah",0.5524
-"SMU",0.5438
-"Rutgers",0.5092
-"Boston College",0.5092
-"West Virginia",0.5005
-"Coastal Carolina",0.4573
-"UCF",0.4486
-"BYU",0.4227
-"Kansas State",0.4054
-"Arizona State",0.3967
-"Tulane",0.3794
+"Alabama",2.2139
+"Georgia",2.1106
+"Oklahoma",1.8436
+"Ohio State",1.723
+"Clemson",1.6971
+"Michigan",1.611
+"Florida",1.5163
+"Oregon",1.4043
+"Ole Miss",1.3871
+"Penn State",1.3612
+"Auburn",1.2665
+"Texas",1.2665
+"North Carolina",1.2234
+"Texas A&M",1.2234
+"Iowa",1.1718
+"Iowa State",1.1373
+"Michigan State",1.1373
+"Cincinnati",1.0512
+"Wisconsin",1.0339
+"Arkansas",1.0081
+"Notre Dame",1.0081
+"NC State",0.9134
+"Virginia Tech",0.8531
+"USC",0.8445
+"Pittsburgh",0.7928
+"LSU",0.7842
+"UCLA",0.7411
+"Virginia",0.7325
+"Baylor",0.7239
+"Mississippi State",0.7153
+"Nebraska",0.6808
+"Appalachian State",0.6636
+"TCU",0.6636
+"Texas Tech",0.6205
+"Miami",0.6119
+"Washington",0.6119
+"West Virginia",0.5861
+"Fresno State",0.5775
+"Minnesota",0.5602
+"Purdue",0.5602
+"Utah",0.5516
+"Boston College",0.4999
+"Rutgers",0.4913
+"SMU",0.4827
+"UCF",0.4569
+"Coastal Carolina",0.4569
+"BYU",0.4224
+"Kansas State",0.4052
+"Arizona State",0.3966
+"Maryland",0.3708
+"Stanford",0.3708
 "Indiana",0.3621
-"Maryland",0.3621
-"Oklahoma State",0.3621
-"Stanford",0.3534
-"Wake Forest",0.3534
-"Tennessee",0.3275
-"Houston",0.3015
-"Georgia Tech",0.3015
-"Boise State",0.2929
-"Kentucky",0.2583
-"Memphis",0.2064
-"UT San Antonio",0.1891
-"Oregon State",0.1891
-"South Carolina",0.1631
-"Liberty",0.1372
-"Missouri",0.1372
-"Louisville",0.1285
-"San Diego State",0.042
-"Louisiana",0.0333
-"Northwestern",0.0333
-"Army",0.0333
-"Western Michigan",0.016
-"Florida Atlantic",0.016
-"Troy",0.0074
-"Marshall",0.0074
-"Buffalo",-0.0359
-"Tulsa",-0.0359
-"Toledo",-0.0445
-"Wyoming",-0.0618
-"Duke",-0.0791
-"Florida State",-0.1829
-"Syracuse",-0.1916
-"Colorado",-0.2089
-"Western Kentucky",-0.2262
-"California",-0.2262
-"Nevada",-0.2349
-"UAB",-0.2608
-"Illinois",-0.2954
-"Central Michigan",-0.3906
-"Louisiana Tech",-0.4079
-"Kent State",-0.4165
-"Middle Tennessee",-0.4771
-"San Jose State",-0.5204
-"Eastern Michigan",-0.529
-"Utah State",-0.5377
-"East Carolina",-0.6242
-"Washington State",-0.6415
-"Miami (OH)",-0.6847
-"North Texas",-0.7107
-"Air Force",-0.7453
-"Charlotte",-0.8232
-"Northern Illinois",-0.8318
-"Colorado State",-0.8405
-"Arkansas State",-0.9356
-"Ball State",-0.9443
-"Hawai'i",-0.9789
-"Southern Mississippi",-0.9962
-"Texas State",-1.0135
-"Arizona",-1.0308
-"South Alabama",-1.0481
-"South Florida",-1.0481
-"Georgia State",-1.1692
-"Florida International",-1.2298
-"Georgia Southern",-1.2557
-"Vanderbilt",-1.299
-"Temple",-1.299
-"Kansas",-1.4201
-"New Mexico",-1.5326
+"Wake Forest",0.3535
+"Oklahoma State",0.3535
+"Tennessee",0.3191
+"Georgia Tech",0.3018
+"Boise State",0.2932
+"Houston",0.276
+"Kentucky",0.2588
+"Memphis",0.2071
+"South Carolina",0.1899
+"UT San Antonio",0.1899
+"Oregon State",0.1813
+"Louisville",0.164
+"Liberty",0.1468
+"Missouri",0.1382
+"UAB",0.1124
+"Army",0.0607
+"Tulane",0.0521
+"San Diego State",0.0348
+"Louisiana",0.0348
+"Northwestern",0.0262
+"Troy",0.0176
+"Western Michigan",0.0176
+"Florida Atlantic",0.009
+"Buffalo",-0.0341
+"Tulsa",-0.0341
+"Toledo",-0.0599
+"Wyoming",-0.0599
+"Duke",-0.1116
+"Marshall",-0.1374
+"Florida State",-0.1719
+"Syracuse",-0.1977
+"Western Kentucky",-0.2149
+"Colorado",-0.2149
+"California",-0.2322
+"Nevada",-0.2322
+"Illinois",-0.2924
+"Central Michigan",-0.3872
+"Kent State",-0.413
+"Louisiana Tech",-0.4216
+"Utah State",-0.4302
+"East Carolina",-0.4475
+"Middle Tennessee",-0.4905
+"Eastern Michigan",-0.525
+"San Jose State",-0.525
+"Washington State",-0.6283
+"Miami (OH)",-0.68
+"Air Force",-0.8006
+"Northern Illinois",-0.8264
+"Colorado State",-0.8351
+"Arkansas State",-0.9298
+"Ball State",-0.9384
+"Texas State",-0.9729
+"Charlotte",-0.9987
+"Hawai'i",-1.0073
+"South Alabama",-1.0159
+"Georgia State",-1.0159
+"Southern Mississippi",-1.0159
+"Arizona",-1.0332
+"South Florida",-1.0504
+"North Texas",-1.0762
+"Florida International",-1.2226
+"Georgia Southern",-1.2485
+"Temple",-1.3002
+"Vanderbilt",-1.3002
+"Kansas",-1.4121
+"New Mexico",-1.5327
 "UTEP",-1.5585
-"Rice",-1.6277
-"Old Dominion",-1.6623
-"UNLV",-1.6883
-"Ohio",-1.7316
-"Bowling Green",-1.8613
-"UMass",-1.9132
-"Navy",-1.9565
-"Louisiana Monroe",-2.0603
-"New Mexico State",-2.2766
-"Akron",-2.3026
-"Connecticut",-2.6054
+"Rice",-1.6188
+"Old Dominion",-1.6533
+"UNLV",-1.6791
+"Ohio",-1.7222
+"Bowling Green",-1.86
+"UMass",-1.9031
+"Navy",-1.9547
+"Louisiana Monroe",-2.0495
+"New Mexico State",-2.282
+"Akron",-2.2906
+"Connecticut",-2.5921

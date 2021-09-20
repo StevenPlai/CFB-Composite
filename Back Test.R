@@ -1,19 +1,20 @@
 library(cfbfastR)
 source("Functions.R")
 
+start <- 1
 week <- CFBWeek()
 lines <- data.frame()
-for(i in 1:week){
+for(i in start:week){
   df <- cfbd_betting_lines(year = 2021, week = i) %>% mutate(week=i)
   lines <- bind_rows(lines,df)
 }
 ratings <- data.frame()
-for(i in 1:week){
+for(i in start:week){
   df <- read.csv(glue("Archived Ratings/Composite/CompositeWeek{i}Ratings.csv")) %>% mutate(week=i)
   ratings <- bind_rows(ratings,df)
 }
 neutrals <- data.frame()
-for(i in 1:week){
+for(i in start:week){
   df <- cfbd_game_info(2021,week=i) %>% select(game_id,neutral_site) %>% mutate(week=i)
   neutrals <- bind_rows(neutrals,df)
 }
@@ -46,7 +47,7 @@ spreads <- lines %>% filter(!is.na(home_score)) %>% group_by(game_id) %>%
          pick_team_margin = if_else(pick_team==home_team,-pt_margin,pt_margin),
          pick_team_spread = if_else(home_team==pick_team,-spread,spread),
          cover_prob = 1-pnorm(pick_team_spread,mean=pick_team_margin, sd=14.5),
-         sp_ev = (100*cover_prob)-(110*(1-cover_prob)),
+         sp_ev = 100,
          cover_team = if_else(result<spread,home_team,away_team),
          amount_won = if_else(pick_team==cover_team,.9090909090909092*sp_ev,-sp_ev),
          stake =((1.9090909090909092*cover_prob)-1)/(1.9090909090909092-1)*15) %>%
@@ -85,7 +86,7 @@ moneylines <- lines %>% filter(!is.na(home_score)&!is.na(home_moneyline)) %>%
                            (abs(away_ml)/100*away_wp)-(100*(home_wp))),
          pick_team = if_else(home_ev>away_ev,home_team,away_team),
          pick_ml = if_else(home_ev>away_ev,home_ml,away_ml),
-         ml_ev = if_else(home_ev>away_ev,home_ev,away_ev),
+         ml_ev = 100,
          winner = if_else(result>0,away_team,home_team),
          amount_won = if_else(pick_team==winner,if_else(pick_ml>0,pick_ml*ml_ev/100,ml_ev*100/-pick_ml),
                               -ml_ev)) %>% filter(ml_ev>0) %>%
