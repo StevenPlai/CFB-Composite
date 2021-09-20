@@ -20,6 +20,7 @@ for(i in start:week){
 }
 lines$home_team <- recode(lines$home_team, "San José State" = "San Jose State")
 lines$away_team <- recode(lines$away_team, "San José State" = "San Jose State")
+hfa <- lines %>% filter(!is.na(home_score)) %>% mutate(hfa = home_score-away_score)
 
 spreads <- lines %>% filter(!is.na(home_score)) %>% group_by(game_id) %>%
   mutate(spread = as.numeric(spread)) %>%
@@ -38,7 +39,7 @@ spreads <- lines %>% filter(!is.na(home_score)) %>% group_by(game_id) %>%
   mutate(pp_margin = home_pp-away_pp,
          poss = 60/(home_pace+away_pace),
          pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss*2),digits=1),
-                             round((-pp_margin*poss*2)-2.5,digits=1)),
+                             round((-pp_margin*poss*2.1)-2.5,digits=1)),
          home_win_prob = pnorm(.0001,mean=pt_margin, sd=14.5),
          away_win_prob = pnorm(.0001,mean=-pt_margin, sd=14.5),
          abs_diff = abs(as.numeric(spread)-pt_margin),
@@ -47,7 +48,7 @@ spreads <- lines %>% filter(!is.na(home_score)) %>% group_by(game_id) %>%
          pick_team_margin = if_else(pick_team==home_team,-pt_margin,pt_margin),
          pick_team_spread = if_else(home_team==pick_team,-spread,spread),
          cover_prob = 1-pnorm(pick_team_spread,mean=pick_team_margin, sd=14.5),
-         sp_ev = 100,
+         sp_ev = (90.9*cover_prob)-(100*(1-cover_prob)),
          cover_team = if_else(result<spread,home_team,away_team),
          amount_won = if_else(pick_team==cover_team,.9090909090909092*sp_ev,-sp_ev),
          stake =((1.9090909090909092*cover_prob)-1)/(1.9090909090909092-1)*15) %>%
@@ -73,7 +74,7 @@ moneylines <- lines %>% filter(!is.na(home_score)&!is.na(home_moneyline)) %>%
   mutate(pp_margin = home_pp-away_pp,
          poss = 60/(home_pace+away_pace),
          pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss*2),digits=1),
-                             round((-pp_margin*poss*2)-2.5,digits=1)),
+                             round((-pp_margin*poss*2.1)-2.5,digits=1)),
          home_wp = pnorm(.0001,mean=pt_margin, sd=14.5),
          away_wp = pnorm(.0001,mean=-pt_margin, sd=14.5),
          home_imp = if_else(home_ml<0,-home_ml/(-home_ml+100),
@@ -86,7 +87,7 @@ moneylines <- lines %>% filter(!is.na(home_score)&!is.na(home_moneyline)) %>%
                            (abs(away_ml)/100*away_wp)-(100*(home_wp))),
          pick_team = if_else(home_ev>away_ev,home_team,away_team),
          pick_ml = if_else(home_ev>away_ev,home_ml,away_ml),
-         ml_ev = 100,
+         ml_ev = if_else(home_ev>away_ev,home_ev,away_ev),
          winner = if_else(result>0,away_team,home_team),
          amount_won = if_else(pick_team==winner,if_else(pick_ml>0,pick_ml*ml_ev/100,ml_ev*100/-pick_ml),
                               -ml_ev)) %>% filter(ml_ev>0) %>%

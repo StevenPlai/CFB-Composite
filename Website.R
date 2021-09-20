@@ -2,6 +2,7 @@ library(shiny)
 library(shinythemes)
 library(tidyverse)
 library(gt)
+library(stringi)
 library(purrr)
 library(glue)
 library(extrafont)
@@ -22,23 +23,12 @@ ui <- fluidPage(
                         fluidRow(
                           column(4, align = "center", offset=0,
                                  
-                                 sliderInput(
-                                   inputId =  "weeks",
-                                   label = "Weeks",
-                                   min = 1, max = week,
-                                   value = c(1,week)
-                                 ),
+                                 numericInput("selected_week", 
+                                              h3("Week"), 
+                                              value = week)) 
                           ),
-                          column(4, align = "center", offset=0,
-                                 
-                                 sliderInput(
-                                   inputId =  "number",
-                                   label = "Number of Teams to Display",
-                                   min = 1, max = 130,
-                                   value = 130)
-                                 ),
                           )
-                        ))))
+                        )))
 
 server <- function(input,output) {
   last_week <- read.csv(glue("Archived Ratings/Composite/CompositeWeek{week-1}Ratings.csv")) %>% arrange(team)
