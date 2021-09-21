@@ -292,11 +292,11 @@ if(nrow(anti_join(new_pr,old_pr,by=c("team","pirate")))>0){
 master <- full_join(new_argh,dr,by="team") %>% full_join(new_fei,by="team") %>%
   full_join(new_fpi,by="team") %>% full_join(new_fox,by="team") %>% full_join(new_how,by="team") %>%
   full_join(new_laz,by="team") %>% full_join(new_pr,by="team") %>% full_join(sp,by="team") %>% 
-  full_join(new_tpr,by="team") %>% full_join(new_tr,by="team") %>% full_join(new_vs,by="team")
+  full_join(new_tr,by="team") %>% full_join(new_vs,by="team")
 
-summary <- as.data.frame(master$team) %>% mutate(mean = rowMeans(master[,c(2:13)]),
-                                                 median = rowMedians(as.matrix(master[,c(2:13)])),
-                                                 sd = matrixStats::rowSds(as.matrix(master[,c(2:13)]))) %>%
+summary <- as.data.frame(master$team) %>% mutate(mean = rowMeans(master[,c(2:12)]),
+                                                 median = rowMedians(as.matrix(master[,c(2:12)])),
+                                                 sd = matrixStats::rowSds(as.matrix(master[,c(2:12)]))) %>%
   rename("team" = "master$team")
 
 model_data <- read_html("https://www.bcftoys.com/2021-fei/") %>% html_table()
