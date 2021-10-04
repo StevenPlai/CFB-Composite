@@ -141,7 +141,7 @@ new_vs <- new_vs[[1]] %>%
          h2=grepl("^[-A-Za-z\\'&]+$", y),
          h3=if_else(h1==F,0,if_else(h2==F,1,2)),
          team=if_else(h3==0,team,if_else(h3==1,paste0(team," ",x),paste0(team," ",x," ",y)))) %>% 
-  mutate(rating = sqrt(Rating)) %>% 
+  mutate(rating = Rating) %>% 
   select(team,rating) %>% mutate(rating = round(standardize(as.numeric(rating)),4)) %>%
   left_join(key,by=c("team"="vs")) %>% select("team"=cfbfastr,"vs"=rating) %>%
   as.data.frame()
@@ -289,14 +289,14 @@ if(nrow(anti_join(new_pr,old_pr,by=c("team","pirate")))>0){
 
 ####Join####
 
-master <- full_join(new_argh,dr,by="team") %>% full_join(new_fei,by="team") %>%
+master <- full_join(new_argh,new_dr,by="team") %>% full_join(new_fei,by="team") %>%
   full_join(new_fpi,by="team") %>% full_join(new_fox,by="team") %>% full_join(new_how,by="team") %>%
-  full_join(new_laz,by="team") %>% full_join(new_pr,by="team") %>% full_join(sp,by="team") %>% 
+  full_join(new_laz,by="team") %>% full_join(new_pr,by="team") %>% 
   full_join(new_tr,by="team") %>% full_join(new_vs,by="team")
 
-summary <- as.data.frame(master$team) %>% mutate(mean = rowMeans(master[,c(2:12)]),
-                                                 median = rowMedians(as.matrix(master[,c(2:12)])),
-                                                 sd = matrixStats::rowSds(as.matrix(master[,c(2:12)]))) %>%
+summary <- as.data.frame(master$team) %>% mutate(mean = rowMeans(master[,c(2:11)]),
+                                                 median = rowMedians(as.matrix(master[,c(2:11)])),
+                                                 sd = matrixStats::rowSds(as.matrix(master[,c(2:11)]))) %>%
   rename("team" = "master$team")
 
 model_data <- read_html("https://www.bcftoys.com/2021-fei/") %>% html_table()
