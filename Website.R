@@ -109,19 +109,19 @@ server <- function(input,output) {
         select(rank,change,logo,team,mascot,rating,weekly) %>% 
         arrange(desc(rating))
     } else{
+      data <- ratings %>% 
+        mutate(rating = round(current$pp,digits=3),
+               logo = logos$A,
+               mascot=logos$mascot) %>%
+        mutate(rank = n()+1-as.numeric(rank(rating,ties.method ="max"))) %>%
+        select(rank,logo,team,mascot,rating) %>% 
+        arrange(desc(rating))
       if(vtype==2){
         data <- data %>% filter(type==2)
       } else{if(vtype==3){
         data <- data %>% filter(type==3)
       } else{if(vtype==4){
         data <- data %>% filter(conf %in% vconf)}}}
-      data <- data %>% 
-      mutate(rating = round(current$pp,digits=3),
-                                 logo = logos$A,
-                                 mascot=logos$mascot) %>%
-        mutate(rank = n()+1-as.numeric(rank(rating,ties.method ="max"))) %>%
-        select(rank,logo,team,mascot,rating) %>% 
-        arrange(desc(rating))
     }
 
   if(vweek>1){
