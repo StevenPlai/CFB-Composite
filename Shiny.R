@@ -14,6 +14,9 @@ library(sparkline)
 source("Functions.R") 
 
 actual_week <- CFBWeek()
+records <- cfbd_game_records(2021) %>% mutate(record = glue("{total_wins}-{total_losses}")) %>% 
+  select(team,record)
+pace <- 
 power_five <- c("SEC","ACC","Pac-12","Big Ten","Big 12")
 
 CSS <- "
@@ -87,7 +90,8 @@ server <- function(input,output) {
   
   ratings <- read.csv("Archived Ratings/Composite/CompositeFullRatings.csv") %>% 
     filter(week<=vweek) %>% 
-    group_by(team) %>% summarise(weekly = list(pp)) %>% arrange(team)
+    group_by(team) %>% summarise(weekly = list(pp)) %>% arrange(team) %>% 
+    left_join(records, by="team")
   
     if(vweek>1){
       data <- ratings %>% mutate(rating = round(current$pp,digits=3),
@@ -106,7 +110,7 @@ server <- function(input,output) {
         mutate(rank = n()+1-as.numeric(rank(rating,ties.method ="max")),
                last_rank = n()+1-as.numeric(rank(last_week,ties.method ="max")),
                change = as.numeric(last_rank)-as.numeric(rank),digits=0) %>%
-        select(rank,change,logo,team,mascot,rating,weekly) %>% 
+        select(rank,change,logo,team,mascot,record,rating,weekly) %>% 
         arrange(desc(rating))
     } else{
       if(vtype==2){
@@ -120,7 +124,7 @@ server <- function(input,output) {
                                  logo = logos$A,
                                  mascot=logos$mascot) %>%
         mutate(rank = n()+1-as.numeric(rank(rating,ties.method ="max"))) %>%
-        select(rank,logo,team,mascot,rating) %>% 
+        select(rank,logo,team,mascot,record,rating) %>% 
         arrange(desc(rating))
     }
 

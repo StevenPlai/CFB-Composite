@@ -10,9 +10,9 @@ neutrals <- cfbd_game_info(2021,week=week) %>% select(game_id,neutral_site)
 lines$home_team <- recode(lines$home_team, "San José State" = "San Jose State")
 lines$away_team <- recode(lines$away_team, "San José State" = "San Jose State")
 summary <- read.csv(glue("Archived Ratings/Composite/CompositeWeek{week}Ratings.csv"))
-hfa <- 2.2
-sd <- 16.67
-broll <- 946.88
+hfa <- 2.5
+sd <- 17.1
+broll <- 695.64
 
 tbp <- lines %>% filter(is.na(home_score)) %>% group_by(game_id) %>%
   mutate(spread = as.numeric(spread)) %>%
