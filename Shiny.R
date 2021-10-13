@@ -113,6 +113,13 @@ server <- function(input,output) {
         select(rank,change,logo,team,mascot,record,rating,weekly) %>% 
         arrange(desc(rating))
     } else{
+      data <- ratings %>% 
+        mutate(rating = round(current$pp,digits=3),
+               logo = logos$A,
+               mascot=logos$mascot) %>%
+        mutate(rank = n()+1-as.numeric(rank(rating,ties.method ="max"))) %>%
+        select(rank,logo,team,mascot,rating) %>% 
+        arrange(desc(rating))
       if(vtype==2){
         data <- data %>% filter(type==2)
       } else{if(vtype==3){
@@ -126,8 +133,6 @@ server <- function(input,output) {
         mutate(rank = n()+1-as.numeric(rank(rating,ties.method ="max"))) %>%
         select(rank,logo,team,mascot,record,rating) %>% 
         arrange(desc(rating))
-    }
-
   if(vweek>1){
     table <- gt(data) %>%
       cols_merge(
