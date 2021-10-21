@@ -12,26 +12,16 @@ actuals <- cfbd_drives(2021) %>% filter(!is.na(offense_conference),!is.na(defens
   group_by(game_id) %>% summarise(home_team = first(offense[is_home_offense==T]),
                                   away_team = first(offense[is_home_offense==F]),
                                   drives = n()) %>% select(drives, game_id)
-projections <- bets %>% select(game_id, home_team, away_team, poss)
-base <- bets %>% select(game_id, home_team, away_team, home_pace, away_pace, home_pp, away_pp, home_conf, away_conf) %>% 
-  left_join(actuals, by="game_id") 
 
-eval <- full_join(actuals, projections, by=c("game_id","home_team", "away_team")) %>% 
-  mutate(proj = (poss*2)-1.931622,
-         error = abs(drives-proj),
-         bias = drives-proj) %>% filter(!is.na(poss),!is.na(drives))
-mean(eval$error)
+base <- train %>% select(game_id, home_team, away_team, home_pace, away_pace, home_pp, away_pp, home_conf, away_conf, spread) %>% 
+  left_join(actuals, by="game_id")  %>% filter(!is.na(drives), !is.na(spread)) %>% 
+  mutate(conf_game = if_else(home_conf==away_conf, 1, 0))
 
-model_data <- base %>% select(home_pace, away_pace, home_pp, away_pp, drives) %>% filter(!is.na(drives))
-ind <- sample(c(TRUE, FALSE), nrow(model_data), replace=TRUE, prob=c(0.5, 0.5))
-test <- model_data[ind, ]
-train <- model_data[!ind, ]
 
-tr_data <- as.matrix(train %>% select(-drives))
-tr_label <- as.matrix(train %>% select(drives))
+model_data <- base %>% select(home_pace, away_pace, home_pp, away_pp, drives,spread,conf_game) %>% filter(!is.na(drives))
 
-te_data <- as.matrix(test %>% select(-drives))
-te_label <- as.matrix(test %>% select(drives))
+tr_data <- as.matrix(model_data %>% select(-drives))
+tr_label <- as.matrix(model_data %>% select(drives))
 
 model_data <- xgb.DMatrix(data = tr_data, label = tr_label)
 

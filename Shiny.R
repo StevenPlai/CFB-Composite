@@ -132,7 +132,7 @@ server <- function(input,output) {
                                  mascot=logos$mascot) %>%
         mutate(rank = n()+1-as.numeric(rank(rating,ties.method ="max"))) %>%
         select(rank,logo,team,mascot,record,rating) %>% 
-        arrange(desc(rating))
+        arrange(desc(rating))}
   if(vweek>1){
     table <- gt(data) %>%
       cols_merge(
