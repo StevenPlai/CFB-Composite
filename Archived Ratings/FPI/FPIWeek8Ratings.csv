@@ -1,5 +1,6 @@
 "team","fpi"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 "Georgia",2.5669
 "Alabama",2.3479
 "Ohio State",2.0675
@@ -131,6 +132,8 @@
 "New Mexico State",-2.2689
 "Connecticut",-2.2864
 =======
+=======
+>>>>>>> Stashed changes
 "Georgia",2.5554
 "Alabama",2.3454
 "Ohio State",2.0654
@@ -261,4 +264,7 @@
 "UMass",-2.143
 "New Mexico State",-2.2567
 "Connecticut",-2.3792
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
