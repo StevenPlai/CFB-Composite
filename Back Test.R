@@ -77,10 +77,25 @@ cp <- models %>% select(-game_id) %>% as.matrix()
 cp <- predict(cp_model, cp)
 extra <- data.frame(game_id = ids, poss = poss, home_wp = wp, home_cp = cp)
 
-spreads <- test %>% filter(!is.na(spread)) %>% left_join(extra, by="game_id") %>% 
-  mutate(away_wp = 1-home_wp,
-         pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss),digits=1),
-                             round((-pp_margin*poss)-hfa,digits=1)),
+spreads <- lines %>% 
+  filter(!is.na(spread)) %>% 
+  left_join(neutrals,by="game_id") %>% 
+  mutate(spread = as.numeric(spread)) %>%
+  group_by(game_id) %>%
+  summarise(home_team=first(home_team),
+            away_team=first(away_team),
+            home_conf=first(home_conference),
+            away_conf=first(away_conference),
+            spread = round(mean(spread),digits=1),
+            result = first(away_score-home_score),
+            week = first(week)) %>%
+  filter(!is.na(home_conf)&!is.na(away_conf)) %>% 
+  filter(!is.na(spread)) %>% left_join(extra, by="game_id") %>% 
+  mutate(pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss),digits=1),
+                                      round((-pp_margin*poss)-hfa,digits=1)),
+         home_wp = pnorm(.0001,mean=pt_margin, sd=sdev),
+         away_wp = 1-home_wp,
+         home_cp =  1-pnorm(pick_team_spread,mean=pick_team_margin, sd=14.5),
          abs_diff = abs(as.numeric(spread)-pt_margin),
          pick_team = if_else(pt_margin<spread,home_team,away_team),
          wp = if_else(pick_team==home_team,home_wp,away_wp),
@@ -88,6 +103,7 @@ spreads <- test %>% filter(!is.na(spread)) %>% left_join(extra, by="game_id") %>
          pick_team_margin = if_else(pick_team==home_team,-pt_margin,pt_margin),
          pick_team_spread = if_else(home_team==pick_team,-spread,spread),
          ev = (90.91*cp)-(100*(1-cp)),
+         result = home_score-away_score,
          cover_team = if_else(result<spread,home_team,away_team),
          amount_won = if_else(pick_team==cover_team,.9090909090909092*ev,-ev),
          stake =((.9091*cp)-(1-cp))/(.9091))
@@ -112,6 +128,30 @@ moneylines <- test %>% filter(!is.na(home_ml)) %>%
          winner = if_else(result>0,away_team,home_team),
          amount_won = if_else(pick_team==winner,if_else(pick_ml>0,pick_ml*ev/100,ev*100/-pick_ml),
                               -ev))
+
+moneylines <- lines %>% filter(!is.na(home_score)&!is.na(home_moneyline)) %>%
+  group_by(game_id) %>% mutate(home_ml = as.numeric(home_moneyline),
+                               away_ml = as.numeric(away_moneyline)) %>%
+  summarise(home_team=first(home_team),
+            away_team=first(away_team),
+            home_conf=first(home_conference),
+            away_conf=first(away_conference),
+            home_ml=mean(home_ml),
+            away_ml=mean(away_ml),
+            result = first(away_score-home_score),
+            week = first(week)) %>%
+  filter(!is.na(home_conf)&!is.na(away_conf)) %>%
+  left_join(neutrals,by=c("game_id","week")) %>%
+  left_join(ratings,by=c("home_team"="team","week")) %>%
+  rename("home_pp"=pp,"home_pace"=pace) %>% left_join(ratings,by=c("away_team"="team","week")) %>%
+  left_join(extra,by="game_id") %>% 
+  mutate(pp_margin = home_pp-away_pp,
+         pt_margin = if_else(neutral_site==TRUE,round((-pp_margin*poss),digits=1),
+                             round((-pp_margin*poss)-hfa,digits=1)),
+         home_wp2 = pnorm(.0001,mean=pt_margin, sd=sdev),
+         away_wp = 1-home_wp,
+         home_imp = if_else(home_ml<0,-home_ml/(-home_ml+100),
+                            100/(home_ml+100)),
 
 bets <- bind_rows(spreads,moneylines) %>% filter(ev>0)
 
