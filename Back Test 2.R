@@ -22,8 +22,8 @@ for(i in start:cweek){
 }
 lines$home_team <- recode(lines$home_team, "San José State" = "San Jose State")
 lines$away_team <- recode(lines$away_team, "San José State" = "San Jose State")
-hfa <- 2.5
-sdev <- 16.09
+hfa <- 2.15
+sdev <- 16.34
 
 spreads <- lines %>% filter(!is.na(home_score)) %>% group_by(game_id) %>%
   summarise(home_team=first(home_team),
@@ -78,11 +78,9 @@ moneylines <- lines %>%   filter(!is.na(home_score)&!is.na(home_moneyline)) %>% 
         away_imp = if_else(away_ml<0,-away_ml/(-away_ml+100),
                            100/(away_ml+100)),
         home_ev = if_else(home_ml>0,(home_ml*home_wp)-(100*(away_wp)),
-                          (abs(home_ml)/100*home_wp)-(100*(away_wp)),
-                          (10000/abs(home_ml)*home_wp)-(100*(away_wp))),
+                          ((-100/home_ml*100)*home_wp)-(100*(away_wp))),
         away_ev = if_else(away_ml>0,(away_ml*away_wp)-(100*(home_wp)),
-                          (abs(away_ml)/100*away_wp)-(100*(home_wp)),
-                         (10000/abs(away_ml)*away_wp)-(100*(home_wp))),
+                          ((-100/away_ml*100)*away_wp)-(100*(away_wp))),
         pick_team = if_else(home_ev>away_ev,home_team,away_team),
         pick_ml = if_else(home_ev>away_ev,home_ml,away_ml), 
         ev = if_else(home_ev>away_ev,home_ev,away_ev),
@@ -91,18 +89,29 @@ moneylines <- lines %>%   filter(!is.na(home_score)&!is.na(home_moneyline)) %>% 
                              -ev)) %>% filter(ev>0) 
         
 bets <- bind_rows(spreads,moneylines) %>%
-      mutate(stake = ev/1.52) %>% filter(stake>0)
+      mutate(stake = ev/1.52,
+             type = if_else(!is.na(home_ml),"ML","SP")) %>% filter(stake>0) 
+
+ml <- bets %>% filter(type=="ML")
+ud <- bets %>% filter(type=="ML",pick_ml>0)
+sp <- bets %>% filter(type=="SP")
+roi <- sum(ml$amount_won)/sum(ml$ev)
+roi <- sum(ud$amount_won)/sum(ud$ev)
+roi <- sum(sp$amount_won)/sum(sp$ev)
 
 roi <- sum(bets$amount_won)/sum(bets$ev)
 units <- sum(bets$amount_won)/mean(bets$ev)
 record <- bets %>% filter(is.na(home_ml)) %>% mutate(str=if_else(amount_won>0,1,0))
 record <- sum(record$str)/nrow(record)
-results_detailed <- spreads %>% mutate(error = abs(pt_margin-result),
+results_detailed <- spreads %>% filter(conference_game==T) %>% mutate(error = abs(pt_margin-result),
                                       sd = abs(pt_margin-result)^2,
                                       bias = pt_margin-result,
                                         diff = abs(pt_margin))
 
 sd = sqrt(sum(results_detailed$sd)/nrow(results_detailed))
-bias = mean(results_detailed$bias))
+bias = mean(results_detailed$bias)
+
+weekly <- bets %>% group_by(week) %>% summarise(won = sum(amount_won),
+                                                roi = won/sum(ev))
 
 ggplot(data=bets,aes(x=week,y=amount_won)) + geom_point() + geom_smooth()                               
